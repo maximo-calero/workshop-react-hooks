@@ -1,0 +1,14 @@
+.main-container {
+  display: grid;
+  grid-template-rows: min-content 20vh min-content;
+  grid-template-columns: 100vw;
+  align-items: center;
+  justify-items: center;
+
+  &__title {
+    color: rgb(68, 68, 190);
+    font-size: 4rem;
+    margin-top: 1.5rem;
+  }
+} 
+
