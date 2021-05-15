@@ -1,38 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './SearchParameters.scss';
 import searchIcon from '../../images/search-icon.png';
 
+const queryTypes = ['movie', 'tv'];
+
 interface Props {
-  queryText: string;
-  onChangeQueryText: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeQueryText: (value: string) => void;
   onClickSearchButton: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
-class SearchParameters extends React.Component<Props, {}> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
+export default function SearchParameters(props: Props) {
+  const { onChangeQueryText, onClickSearchButton } = props;
+  const [queryType, setQueryType] = useState('movie');
+  const [queryText, setQueryText] = useState('');
 
-  render() {
-    return (
-        <div className='search-parameters-container'>
-          <input 
-            onChange={this.props.onChangeQueryText} 
-            className='search-parameters-container__search-text-box' 
-            type='text' value={this.props.queryText} 
-            placeholder='Introduzca el nombre de una película'
-          />
-          <button 
-            onClick={this.props.onClickSearchButton} 
-            className='search-parameters-container__search-button' 
-            value='Buscar'
-          > 
-            <img alt='search icon' className='search-parameters-container__search-icon' src={searchIcon} />            
-          </button>
-        </div>        
-    );
-  }
+  const handleQueryType = (event: any) => {
+    setQueryType(event.target.value);
+  };
+
+  const handleQueryText = (event: any) => {
+    setQueryText(event.target.value);
+    onChangeQueryText(event.target.value);
+  };
+
+  return (
+      <div className='search-parameters-container'>
+        <select value={queryType} onChange={handleQueryType}>
+          {queryTypes.map((item) => (<option key={item}>{item}</option>))}
+        </select>
+        <input 
+          onChange={handleQueryText} 
+          className='search-parameters-container__search-text-box' 
+          type='text' value={queryText} 
+          placeholder='Introduzca el nombre de una película'
+        />
+        <button 
+          onClick={onClickSearchButton} 
+          className='search-parameters-container__search-button' 
+          value='Buscar'
+        > 
+          <img alt='search icon' className='search-parameters-container__search-icon' src={searchIcon} />            
+        </button>
+      </div>        
+  );
 }
-
-export default SearchParameters;
