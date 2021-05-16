@@ -1,18 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './SearchParameters.scss';
-import searchIcon from '../../images/search-icon.png';
+
 
 const queryTypes = ['movie', 'tv'];
+const baseUrl = `${process.env.REACT_APP_TMDB_API}/search`;
+const apiKey = process.env.REACT_APP_API_KEY;
 
 interface Props {
-  onChangeQueryText: (value: string) => void;
-  onClickSearchButton: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onChangeQueryUrl: (value: string) => void;
 }
 
 export default function SearchParameters(props: Props) {
-  const { onChangeQueryText, onClickSearchButton } = props;
+  const { onChangeQueryUrl } = props;
   const [queryType, setQueryType] = useState('movie');
   const [queryText, setQueryText] = useState('');
+  const [queryUrl, setQueryUrl] = useState('');
+
+  useEffect(()=> {
+    if (queryText.length >= 3) 
+      setQueryUrl(`${baseUrl}/${queryType}?api_key=${apiKey}&query=${queryText}&page=1`);
+  }, [queryText, queryType]);
+
+  useEffect(()=> {
+    if (queryUrl) 
+    onChangeQueryUrl(queryUrl);
+  }, [queryUrl, onChangeQueryUrl]);
 
   const handleQueryType = (event: any) => {
     setQueryType(event.target.value);
@@ -20,7 +32,6 @@ export default function SearchParameters(props: Props) {
 
   const handleQueryText = (event: any) => {
     setQueryText(event.target.value);
-    onChangeQueryText(event.target.value);
   };
 
   return (
@@ -29,18 +40,11 @@ export default function SearchParameters(props: Props) {
           {queryTypes.map((item) => (<option key={item}>{item}</option>))}
         </select>
         <input 
-          onChange={handleQueryText} 
+          onChange={handleQueryText}
           className='search-parameters-container__search-text-box' 
           type='text' value={queryText} 
           placeholder='Introduzca el nombre de una película'
         />
-        <button 
-          onClick={onClickSearchButton} 
-          className='search-parameters-container__search-button' 
-          value='Buscar'
-        > 
-          <img alt='search icon' className='search-parameters-container__search-icon' src={searchIcon} />            
-        </button>
       </div>        
   );
 }
