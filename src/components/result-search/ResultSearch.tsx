@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './ResultSearch.scss';
 import { Media } from '../../common/interfaces/media';
 import { SearchResults } from '../../common/interfaces/searchresults';
@@ -14,14 +14,16 @@ export default function ResultSearch(props: Props) {
     const { queryUrl } = props;
     const [medias, setMedias] = useState<Media[]>([]);
 
-    useEffect(() => {
-        const getMovies = async (url: string) => {
-            const searchResults: SearchResults = await searchMedias(url);
-            return searchResults;            
-        };
-        if (queryUrl)
-            getMovies(queryUrl).then((result: SearchResults) => setMedias(result.results));
+    const getMedias = useCallback( async ()=> {
+        if (queryUrl) {
+            const searchResults: SearchResults = await searchMedias(queryUrl);
+            setMedias(searchResults.results);
+        }
     }, [queryUrl]);
+
+    useEffect(() => {
+        getMedias();
+    }, [getMedias]);
 
     if (medias.length === 0) {
         return (
