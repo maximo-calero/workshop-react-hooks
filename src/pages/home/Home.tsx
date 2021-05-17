@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Home.scss';
 import SearchParameters from '../../components/search-parameters/SearchParameters';
 import ResultSearch from '../../components/result-search/ResultSearch';
+import { SearchProvider } from '../../common/context/SearchProvider';
 
 export default function Home(){
-  const [queryUrl, setQueryUrl] = useState('');
-
-  const handleQueryUrl = (value: string) => {
-    setQueryUrl(value);
-  };
 
   return (
     <div className="main-container">
       <h1 className='main-container__title'>Buscador de películas o series</h1>
-      <SearchParameters onChangeQueryUrl={handleQueryUrl} />
-      <ResultSearch queryUrl={queryUrl} />
+      <SearchProvider>
+        <>
+          <SearchParameters />
+          <ResultSearch />
+        </>
+      </SearchProvider>
     </div>
   );
 }

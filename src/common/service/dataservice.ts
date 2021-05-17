@@ -1,7 +1,6 @@
 import moment from "moment";
 import { SearchResults } from "../interfaces/searchresults";
 import { Media } from "../interfaces/media";
-
  
 export async function searchMedias(queryUrl: string): Promise<SearchResults> {
     //Url example: https://api.themoviedb.org/3/search/movie?api_key=3983080328&query=endgame&page=1

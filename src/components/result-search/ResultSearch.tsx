@@ -5,13 +5,15 @@ import { SearchResults } from '../../common/interfaces/searchresults';
 import { searchMedias } from '../../common/service/dataservice';
 
 import MediaCard from './components/media-card/MediaCard';
+import { useSearchContext } from '../../common/context/SearchProvider';
 
-interface Props {
-    queryUrl: string;
-}
+// interface Props {
+//     queryUrl: string;
+// }
 
-export default function ResultSearch(props: Props) {
-    const { queryUrl } = props;
+export default function ResultSearch() {
+    // const { queryUrl } = props;
+    const { queryUrl } = useSearchContext();
     const [medias, setMedias] = useState<Media[]>([]);
 
     const getMedias = useCallback( async ()=> {
