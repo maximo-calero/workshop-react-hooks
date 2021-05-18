@@ -7,12 +7,7 @@ import { searchMedias } from '../../common/service/dataservice';
 import MediaCard from './components/media-card/MediaCard';
 import { useSearchContext } from '../../common/context/SearchProvider';
 
-// interface Props {
-//     queryUrl: string;
-// }
-
 export default function ResultSearch() {
-    // const { queryUrl } = props;
     const { queryUrl } = useSearchContext();
     const [medias, setMedias] = useState<Media[]>([]);
 

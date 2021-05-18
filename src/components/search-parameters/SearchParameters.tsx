@@ -2,17 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useSearchContext } from '../../common/context/SearchProvider';
 import './SearchParameters.scss';
 
-// const queryTypes = ['movie', 'tv'];
-// const baseUrl = `${process.env.REACT_APP_TMDB_API}/search`;
-// const apiKey = process.env.REACT_APP_API_KEY;
-
-// interface Props {
-//   onChangeQueryUrl: (value: string) => void;
-// }
-
 export default function SearchParameters() {
-  // const { onChangeQueryUrl } = props;
-  const { configuration : {queryTypes, baseUrl, apiKey }, changeQueryUrl, } = useSearchContext();
+  const { configuration : { queryTypes, baseUrl, apiKey }, changeQueryUrl, } = useSearchContext();
   const [queryType, setQueryType] = useState('movie');
   const [queryText, setQueryText] = useState('');
   const [queryUrl, setQueryUrl] = useState('');
