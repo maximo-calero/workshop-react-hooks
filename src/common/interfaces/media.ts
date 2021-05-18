@@ -1,6 +1,6 @@
 import moment from "moment";
 
-export interface Movie {
+export interface Media {
     id: string;
     title: string;
     overview: string;

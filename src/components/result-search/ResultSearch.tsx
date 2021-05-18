@@ -1,55 +1,42 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './ResultSearch.scss';
-import { Movie } from '../../common/interfaces/movie';
-import { truncateLongString } from '../../common/utils/utils'
+import { Media } from '../../common/interfaces/media';
+import { SearchResults } from '../../common/interfaces/searchresults';
+import { searchMedias } from '../../common/service/dataservice';
 
-interface Props {
-    movies: Movie[];
-}
+import MediaCard from './components/media-card/MediaCard';
+import { useSearchContext } from '../../common/context/SearchProvider';
 
-class ResultSearch extends React.Component<Props,{}> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {};
-    }
+export default function ResultSearch() {
+    const { queryUrl } = useSearchContext();
+    const [medias, setMedias] = useState<Media[]>([]);
 
-    render() {
-        if (this.props.movies.length === 0) {
-            return (
-                <div className='result-search'>
-                    <div className='result-search__no-results-message'>La búsqueda no devolvió resultados</div>  
-                </div>
-            );
+    const getMedias = useCallback( async ()=> {
+        if (queryUrl) {
+            const searchResults: SearchResults = await searchMedias(queryUrl);
+            setMedias(searchResults.results);
         }
+    }, [queryUrl]);
 
+    useEffect(() => {
+        getMedias();
+    }, [getMedias]);
+
+    if (medias.length === 0) {
         return (
             <div className='result-search'>
-                <div className='result-search__items'>
-                {this.props.movies && this.props.movies.length > 0 &&
-                    this.props.movies.map(movie => {
-                        return (
-                            <div 
-                                key={movie.id} 
-                                className='result-search__items__item'
-                            >
-                                <div 
-                                    className="result-search__items__item__image"
-                                    style={{
-                                        backgroundImage: `url(${movie.imageUrl})`,
-                                    }}
-                                ></div>
-                                <h2 title={movie.title} className="result-search__items__item__title">{truncateLongString(movie.title).truncate(30, 1)}</h2>
-                                <p className="result-search__items__item__overview">{truncateLongString(movie.overview).truncate(150, 1)}</p>
-                                <span className="result-search__items__item__release-date">{movie.releaseDate.format('DD/MM/YYYY')}</span>
-                                <span className="result-search__items__item__rate">{movie.rate}</span>
-                            </div>
-                        );
-                    })
-                }
-                </div>
-            </div>        
+                <div className='result-search__no-results-message'>La búsqueda no devolvió resultados</div>  
+            </div>
         );
     }
-}
 
-export default ResultSearch;
+    return (
+        <div className='result-search'>
+            <div className='result-search__items'>
+            {medias && medias.length > 0 &&
+                medias.map(media => (<MediaCard key={media.id} media={media} />))
+            }
+            </div>
+        </div>
+    );
+}
